@@ -70,14 +70,14 @@ export const POST = async (request: Request) => {
 			evnt?.data ?? {};
 
 		try {
-			await createCommunity(
-				id,
-				name,
-				slug,
-				logo_url || image_url,
-				'org bio',
-				created_by,
-			);
+			await createCommunity({
+				id: id as string,
+				name: name as string,
+				username: slug as string,
+				image: (logo_url || image_url) as string,
+				bio: 'org bio',
+				createdById: created_by as string,
+			});
 
 			return NextResponse.json(
 				{ message: 'User created' },
