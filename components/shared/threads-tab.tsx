@@ -1,7 +1,10 @@
 import { redirect } from 'next/navigation';
-import { ThreadInterface } from '../../interfaces/thread.interface';
-import { ThreadCard } from '../cards/thread-card';
+
+// SERVICES
 import { getProfile } from '../../services/profile/get-profile';
+
+// COMPONENTS
+import { ThreadCard } from '../cards/thread-card';
 
 interface ThreadsTabProps {
 	currentUserId: string;
@@ -14,10 +17,17 @@ const ThreadsTab: React.FC<ThreadsTabProps> = async ({
 	accountId,
 	accountType,
 }) => {
-	const { profile, threads: profileThreads } = await getProfile(accountId);
+	const result = await getProfile(accountId);
+	if (!result?.profile.onboarded) {
+		redirect('/onboarding');
+		return null;
+	}
+
+	const { profile, threads: profileThreads } = result;
 
 	if (!profileThreads?.length) {
 		redirect('/');
+		return null;
 	}
 
 	return (
