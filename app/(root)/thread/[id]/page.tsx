@@ -25,7 +25,7 @@ const ThreadPage: NextPage<ThreadPageProps> = async ({ params: { id } }) => {
 	}
 
 	const userInfo = await getUser(clerkUser.id);
-	if (!userInfo.onboarded) {
+	if (!userInfo?.onboarded) {
 		redirect(`/onboarding`);
 	}
 

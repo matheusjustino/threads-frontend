@@ -16,11 +16,11 @@ const OnboardingPage = async () => {
 
 	const userData = {
 		id: user.id,
-		objectId: userInfo.id,
-		username: userInfo.username || user?.username || '',
-		name: userInfo.name || user?.firstName || '',
-		bio: userInfo.bio || '',
-		image: userInfo.profilePhoto || user?.imageUrl,
+		objectId: userInfo?.id,
+		username: userInfo?.username || user?.username || '',
+		name: userInfo?.name || user?.firstName || '',
+		bio: userInfo?.bio || '',
+		image: userInfo?.profilePhoto || user?.imageUrl,
 	};
 
 	return (

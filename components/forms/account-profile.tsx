@@ -22,7 +22,7 @@ import { useToast } from '../ui/use-toast';
 interface AccountProfileProps {
 	user: {
 		id?: string;
-		objectId: string;
+		objectId?: string;
 		username: string;
 		name: string;
 		bio: string;

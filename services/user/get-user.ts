@@ -5,5 +5,10 @@ import { api } from '../../lib/axios';
 import { UserInterface } from '../../interfaces/user.interface';
 
 export const getUser = async (userId: string) => {
-	return api.get<UserInterface>(`/users/${userId}`).then((res) => res.data);
+	return api
+		.get<UserInterface>(`/users/${userId}`)
+		.then((res) => res.data)
+		.catch((error) => {
+			console.error(error.response);
+		});
 };

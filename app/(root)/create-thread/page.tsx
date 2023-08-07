@@ -15,7 +15,7 @@ const CreateThreadPage: NextPage = async () => {
 	}
 
 	const userInfo = await getUser(user.id);
-	if (!userInfo.onboarded) {
+	if (!userInfo?.onboarded) {
 		redirect('/onboarding');
 	}
 

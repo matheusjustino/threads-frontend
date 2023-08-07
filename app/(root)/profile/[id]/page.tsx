@@ -31,10 +31,12 @@ const ProfilePage: NextPage<ProfilePageProps> = async ({ params: { id } }) => {
 		return null;
 	}
 
-	const { profile, threads } = await getProfile(id);
-	if (!profile.onboarded) {
+	const result = await getProfile(id);
+	if (!result?.profile.onboarded) {
 		redirect('/onboarding');
+		return null;
 	}
+	const { profile, threads } = result;
 
 	return (
 		<section>
