@@ -25,11 +25,6 @@ const ThreadsTab: React.FC<ThreadsTabProps> = async ({
 
 	const { profile, threads: profileThreads } = result;
 
-	if (!profileThreads?.length) {
-		redirect('/');
-		return null;
-	}
-
 	return (
 		<section className="mt-9 flex flex-col gap-10">
 			{profileThreads.map((thread) => (
