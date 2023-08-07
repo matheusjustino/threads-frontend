@@ -2,20 +2,18 @@
 
 import { useEffect } from 'react';
 import { NextPage } from 'next';
-import { Loader } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useClerk } from '@clerk/nextjs';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 // SERVICES
 import { getUserActivity } from '../../../services/user/get-user-activity';
-import Link from 'next/link';
-import Image from 'next/image';
 
 const ActivityPage: NextPage = () => {
 	const { user, loaded } = useClerk();
 
-	const { data, refetch, isFetching } = useQuery(
+	const { data, refetch } = useQuery(
 		[`get-user-activity-${user?.id}`],
 		async () => {
 			return await getUserActivity(user?.id ?? '');
@@ -27,40 +25,11 @@ const ActivityPage: NextPage = () => {
 
 	const activity = data ?? [];
 
-	// const {
-	// 	data,
-	// 	refetch,
-	// 	fetchNextPage,
-	// 	hasNextPage,
-	// 	isFetched,
-	// 	isFetchingNextPage,
-	// } = useInfiniteQuery(
-	// 	[`infinite-user-activity-${user?.id}`],
-	// 	async ({ pageParam = 0 }) => {
-	// 		console.log('fetching...');
-	// 		return await getUserActivity(user?.id ?? '');
-	// 	},
-	// 	{
-	// 		getNextPageParam: (lastPage, pages) => {
-	// 			if (lastPage?.length < 10) {
-	// 				return false;
-	// 			}
-
-	// 			return pages.length + 1;
-	// 		},
-	// 		enabled: false,
-	// 	},
-	// );
-
 	useEffect(() => {
 		if (loaded) {
 			refetch();
 		}
 	}, [loaded, refetch]);
-
-	// const activity = data?.pages.flat() ?? [];
-
-	console.log({ activity });
 
 	return (
 		<section>

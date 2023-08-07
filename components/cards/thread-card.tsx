@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
+// UTILS
+import { formatDateString } from '../../lib/utils';
+
 // INTERFACES
 import { ThreadInterface } from '../../interfaces/thread.interface';
 import { UserInterface } from '../../interfaces/user.interface';
@@ -115,7 +118,32 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread, isComment }) => {
 							</div>
 						</div>
 					</div>
+
+					{/** TODO: Delete Thread */}
+
+					{/** TODO: Show comments logos */}
 				</div>
+
+				{!isComment && thread.community && (
+					<Link
+						href={`/communities/${thread.community.id}`}
+						className="mt-5 flex items-center"
+					>
+						<p className="text-subtle-medium text-gray-1 hover:text-primary-500">
+							{formatDateString(thread.createdAt)} -{' '}
+							{thread.community.name} Community
+						</p>
+
+						<Image
+							src={thread.community.image}
+							alt={thread.community.name}
+							priority
+							width={24}
+							height={24}
+							className="ml-1 rounded-full"
+						/>
+					</Link>
+				)}
 			</article>
 		</Link>
 	);

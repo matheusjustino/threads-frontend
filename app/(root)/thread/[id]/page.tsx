@@ -7,8 +7,8 @@ import { getUser } from '../../../../services/user/get-user';
 import { getThread } from '../../../../services/thead/get-thread';
 
 // COMPONENTS
-import { ThreadCard } from '../../../../components/cards/thread-card';
 import { Comment } from '../../../../components/forms/comment';
+import { ThreadCard } from '../../../../components/cards/thread-card';
 
 interface ThreadPageProps {
 	params: {

@@ -1,7 +1,11 @@
 import { redirect } from 'next/navigation';
 
 // SERVICES
-import { getProfile } from '../../services/profile/get-profile';
+import { getUserProfile } from '../../services/profile/get-user-profile';
+import { getCommunityProfile } from '../../services/community/get-community-profile';
+
+// INTERFACES
+import { CommunityInterface } from '../../interfaces/community.interface';
 
 // COMPONENTS
 import { ThreadCard } from '../cards/thread-card';
@@ -17,17 +21,25 @@ const ThreadsTab: React.FC<ThreadsTabProps> = async ({
 	accountId,
 	accountType,
 }) => {
-	const result = await getProfile(accountId);
-	if (!result?.profile.onboarded) {
-		redirect('/onboarding');
+	let result;
+
+	if (accountType === 'User') {
+		result = await getUserProfile(accountId);
+	} else {
+		result = await getCommunityProfile(accountId);
+	}
+
+	if (!result) {
+		redirect('/');
 		return null;
 	}
 
-	const { profile, threads: profileThreads } = result;
+	const { profile, threads } = result;
+	const author = (profile as CommunityInterface)?.createdBy || profile;
 
 	return (
 		<section className="mt-9 flex flex-col gap-10">
-			{profileThreads.map((thread) => (
+			{threads.map((thread) => (
 				<ThreadCard
 					key={thread.id}
 					thread={{
@@ -35,10 +47,10 @@ const ThreadsTab: React.FC<ThreadsTabProps> = async ({
 						currentUser: currentUserId,
 						parentId: thread.parentThreadId,
 						text: thread.text,
-						author:
-							accountType === 'User' ? profile : thread.author,
+						author: accountType === 'User' ? author : thread.author,
 						comments: thread.comments,
 						createdAt: thread.createdAt,
+						community: thread.community,
 					}}
 				/>
 			))}

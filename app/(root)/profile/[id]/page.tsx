@@ -7,7 +7,7 @@ import { currentUser } from '@clerk/nextjs';
 import { profileTabs } from '../../../../constants';
 
 // SERVICES
-import { getProfile } from '../../../../services/profile/get-profile';
+import { getUserProfile } from '../../../../services/profile/get-user-profile';
 
 // COMPONENTS
 import {
@@ -31,7 +31,7 @@ const ProfilePage: NextPage<ProfilePageProps> = async ({ params: { id } }) => {
 		return null;
 	}
 
-	const result = await getProfile(id);
+	const result = await getUserProfile(id);
 	if (!result?.profile.onboarded) {
 		redirect('/onboarding');
 		return null;

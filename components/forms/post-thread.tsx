@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
+import { useOrganization } from '@clerk/nextjs';
 
 // VALIDATIONS
 import {
@@ -18,12 +19,14 @@ import { createThread } from '../../services/thead/create-thread';
 // LIBS
 import { internalApi } from '../../lib/axios';
 
+// INTERFACES
+import { ThreadInterface } from '../../interfaces/thread.interface';
+
 // COMPONENTS
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { useToast } from '../ui/use-toast';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { ThreadInterface } from '../../interfaces/thread.interface';
 
 interface PostThreadProps {
 	userId: string;
@@ -33,6 +36,7 @@ const PostThread: React.FC<PostThreadProps> = ({ userId }) => {
 	const pathname = usePathname();
 	const { push } = useRouter();
 	const { toast } = useToast();
+	const { organization } = useOrganization();
 	const queryClient = useQueryClient();
 	const form = useForm<ThreadValidationType>({
 		resolver: zodResolver(ThreadValidation),
@@ -48,7 +52,7 @@ const PostThread: React.FC<PostThreadProps> = ({ userId }) => {
 
 			await createThread({
 				...data,
-				communityId: null,
+				communityId: organization?.id || null,
 			})
 				.then(async (res) => {
 					toast({
@@ -80,7 +84,7 @@ const PostThread: React.FC<PostThreadProps> = ({ userId }) => {
 					});
 				});
 		},
-		[toast, form, pathname, push],
+		[toast, form, pathname, push, queryClient, organization],
 	);
 
 	return (

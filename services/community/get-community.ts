@@ -4,11 +4,8 @@ import { api } from '../../lib/axios';
 // INTERFACES
 import { CommunityInterface } from '../../interfaces/community.interface';
 
-export const addMemberToCommunity = async (
-	communityId: string,
-	userId: string,
-) => {
+export const getCommunity = async (id: string) => {
 	return api
-		.put<CommunityInterface>(`/${communityId}/add/member`, { userId })
+		.get<CommunityInterface>(`/communities/${id}`)
 		.then((res) => res.data);
 };

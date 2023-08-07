@@ -29,7 +29,9 @@ const LeftSideBar: React.FC = () => {
 							href={link.route}
 							key={link.label}
 							className={`leftsidebar_link ${
-								isActive && 'bg-primary-500 '
+								isActive
+									? 'bg-primary-500'
+									: 'hover:bg-primary-500/30'
 							}`}
 						>
 							<Image
