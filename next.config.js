@@ -8,7 +8,11 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
 	images: {
-		domains: ['localhost', 'img.clerk.com'],
+		domains: [
+			'localhost',
+			'img.clerk.com',
+			'threads-backend-b8daee83f8bc.herokuapp.com',
+		],
 	},
 };
 
