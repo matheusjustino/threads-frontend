@@ -10,5 +10,6 @@ export const addMemberToCommunity = async (
 ) => {
 	return api
 		.put<CommunityInterface>(`/${communityId}/add/member`, { userId })
-		.then((res) => res.data);
+		.then((res) => res.data)
+		.catch((err) => console.error(err));
 };

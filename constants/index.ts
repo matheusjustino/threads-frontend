@@ -31,11 +31,15 @@ export const sidebarLinks = [
 	},
 ];
 
+export type PROFILE_TABS = 'Threads' | 'Replies' | 'Tagged';
+
 export const profileTabs = [
 	{ value: 'threads', label: 'Threads', icon: '/assets/reply.svg' },
 	{ value: 'replies', label: 'Replies', icon: '/assets/members.svg' },
 	{ value: 'tagged', label: 'Tagged', icon: '/assets/tag.svg' },
 ];
+
+export type COMMUNITY_TABS = 'Threads' | 'Members' | 'Requests';
 
 export const communityTabs = [
 	{ value: 'threads', label: 'Threads', icon: '/assets/reply.svg' },

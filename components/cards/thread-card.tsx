@@ -6,24 +6,18 @@ import { formatDateString } from '../../lib/utils';
 
 // INTERFACES
 import { ThreadInterface } from '../../interfaces/thread.interface';
-import { UserInterface } from '../../interfaces/user.interface';
 
 interface ThreadCardProps {
-	// thread: ThreadInterface;
-	thread: {
-		id: string;
-		currentUser: string;
-		parentId?: string;
-		text: string;
-		author: UserInterface;
-		comments?: ThreadInterface[];
-		community?: any;
-		createdAt: string;
-	};
+	thread: ThreadInterface;
+	currentUserId?: string;
 	isComment?: boolean;
 }
 
-const ThreadCard: React.FC<ThreadCardProps> = ({ thread, isComment }) => {
+const ThreadCard: React.FC<ThreadCardProps> = ({
+	thread,
+	currentUserId,
+	isComment,
+}) => {
 	return (
 		<Link href={`/thread/${thread.id}`}>
 			<article
