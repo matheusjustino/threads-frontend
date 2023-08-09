@@ -35,10 +35,8 @@ const ThreadPage: NextPage<ThreadPageProps> = async ({ params: { id } }) => {
 		<section className="relative">
 			<div>
 				<ThreadCard
-					thread={{
-						...thread,
-						currentUser: clerkUser.id,
-					}}
+					thread={thread}
+					currentUserId={clerkUser?.id ?? ''}
 				/>
 			</div>
 
@@ -55,10 +53,8 @@ const ThreadPage: NextPage<ThreadPageProps> = async ({ params: { id } }) => {
 					return (
 						<ThreadCard
 							key={comment.id}
-							thread={{
-								...comment,
-								currentUser: clerkUser.id,
-							}}
+							thread={comment}
+							currentUserId={clerkUser?.id ?? ''}
 							isComment
 						/>
 					);

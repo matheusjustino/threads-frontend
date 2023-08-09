@@ -75,10 +75,8 @@ const HomePage: NextPage = () => {
 					threads.map((thread) => (
 						<ThreadCard
 							key={thread.id}
-							thread={{
-								...thread,
-								currentUser: userClerk.user?.id ?? '',
-							}}
+							thread={thread}
+							currentUserId={userClerk.user?.id ?? ''}
 						/>
 					))}
 			</InfiniteScroll>
