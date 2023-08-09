@@ -8,6 +8,7 @@ export interface ThreadInterface {
 	authorId: string;
 	author: UserInterface;
 	parentThreadId?: string;
+	commentsCount: number;
 	comments: ThreadInterface[];
 	communityId?: string;
 	community?: CommunityInterface;
