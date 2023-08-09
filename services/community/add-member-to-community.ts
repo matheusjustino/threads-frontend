@@ -9,7 +9,9 @@ export const addMemberToCommunity = async (
 	userId: string,
 ) => {
 	return api
-		.put<CommunityInterface>(`/${communityId}/add/member`, { userId })
+		.put<CommunityInterface>(`/communities/${communityId}/add/member`, {
+			userId,
+		})
 		.then((res) => res.data)
 		.catch((err) => console.error(err));
 };
