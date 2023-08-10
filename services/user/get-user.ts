@@ -10,5 +10,6 @@ export const getUser = async (userId: string) => {
 		.then((res) => res.data)
 		.catch((error) => {
 			console.error(error.response);
+			return null;
 		});
 };

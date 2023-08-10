@@ -1,20 +1,23 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { Loader } from 'lucide-react';
 import { useClerk } from '@clerk/nextjs';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import debounce from 'lodash.debounce';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 // SERVICES
 import { listUsers } from '../../../services/user/list-users';
 
 // COMPONENTS
+import { Input } from '../../../components/ui/input';
 import { UserCard } from '../../../components/cards/user-card';
 
 const SearchPage: NextPage = () => {
 	const { user, loaded } = useClerk();
+	const [searchInput, setSearchInput] = useState<string>('');
 
 	const {
 		data,
@@ -24,11 +27,16 @@ const SearchPage: NextPage = () => {
 		isFetched,
 		isFetchingNextPage,
 	} = useInfiniteQuery(
-		[`infinite-search-feed`],
-		async ({ pageParam = 0 }) => {
+		[`infinite-search-feed`, searchInput],
+		async ({ pageParam = 0, queryKey }) => {
+			if (!searchInput.trim().length) {
+				return [];
+			}
+
 			return await listUsers({
 				userId: user?.id ?? '',
 				skip: pageParam,
+				searchTerm: queryKey[1],
 				take: '10',
 			});
 		},
@@ -44,17 +52,37 @@ const SearchPage: NextPage = () => {
 		},
 	);
 
+	const fetchUsers = debounce(() => {
+		refetch();
+	}, 500);
+
 	useEffect(() => {
 		if (loaded) {
-			refetch();
+			fetchUsers();
 		}
-	}, [loaded, refetch]);
+	}, [loaded]);
+
+	const debouncedFetchUsers = useCallback(() => {
+		fetchUsers();
+	}, []);
 
 	const users = data?.pages.flat() ?? [];
 
 	return (
 		<section>
 			<h1 className="head-text mb-10">Search</h1>
+
+			<Input
+				id="searchTerm"
+				name="searchTerm"
+				value={searchInput}
+				onChange={(v) => {
+					setSearchInput(v.target.value);
+					debouncedFetchUsers();
+				}}
+				className="no-focus border border-dark-4 bg-dark-3 text-light-1"
+				placeholder="Search..."
+			/>
 
 			{!loaded && (
 				<div className="w-full flex flex-col items-center justify-center mt-8">

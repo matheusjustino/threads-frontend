@@ -39,16 +39,16 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ params: { id } }) => {
 		isFetching,
 		isLoading,
 	} = useQuery({
-		queryKey: [`get-user-profile-${id}`, selectedTab],
-		queryFn: async ({ queryKey }) => {
-			return await getCommunityProfile(id, queryKey[1] as COMMUNITY_TABS);
+		queryKey: [`get-user-profile-${id}`],
+		queryFn: async () => {
+			return await getCommunityProfile(id);
 		},
 		enabled: false,
 	});
 
 	useEffect(() => {
 		refetch();
-	}, [id, refetch, selectedTab]);
+	}, [id, refetch]);
 
 	if (isFetching || isLoading) {
 		return (
@@ -68,6 +68,8 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ params: { id } }) => {
 	}
 
 	const { profile, threads } = result;
+	const selectedTabItemsLength =
+		selectedTab === 'Threads' ? threads.length : profile.members.length;
 
 	return (
 		<section>
@@ -93,6 +95,9 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ params: { id } }) => {
 								key={tab.label}
 								value={tab.value}
 								disabled={tab.label === 'Requests'}
+								onClick={() =>
+									setSelectedTab(tab.label as COMMUNITY_TABS)
+								}
 								className="tab"
 							>
 								<Image
@@ -106,7 +111,7 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ params: { id } }) => {
 
 								{tab.label === selectedTab && (
 									<p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
-										{threads.length ?? 0}
+										{selectedTabItemsLength ?? 0}
 									</p>
 								)}
 							</TabsTrigger>

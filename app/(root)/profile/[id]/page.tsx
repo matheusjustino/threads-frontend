@@ -39,16 +39,16 @@ const ProfilePage: NextPage<ProfilePageProps> = memo(({ params: { id } }) => {
 		isFetching,
 		isLoading,
 	} = useQuery({
-		queryKey: [`get-user-profile-${id}`, selectedTab],
-		queryFn: async ({ queryKey }) => {
-			return await getUserProfile(id, queryKey[1] as PROFILE_TABS);
+		queryKey: [`get-user-profile-${id}`],
+		queryFn: async () => {
+			return await getUserProfile(id);
 		},
 		enabled: false,
 	});
 
 	useEffect(() => {
 		refetch();
-	}, [id, refetch, selectedTab]);
+	}, [id, refetch]);
 
 	if (isFetching || isLoading) {
 		return (
@@ -59,10 +59,10 @@ const ProfilePage: NextPage<ProfilePageProps> = memo(({ params: { id } }) => {
 		);
 	}
 
-	if (!result?.profile.onboarded) {
-		redirect('/onboarding');
-		return null;
-	}
+	// if (!result?.profile.onboarded) {
+	// 	redirect('/onboarding');
+	// 	return null;
+	// }
 
 	if (!result) {
 		return (
@@ -72,7 +72,8 @@ const ProfilePage: NextPage<ProfilePageProps> = memo(({ params: { id } }) => {
 		);
 	}
 
-	const { profile, threads } = result;
+	const { profile, threads, replies } = result;
+	const selectedPosts = selectedTab === 'Threads' ? threads : replies;
 
 	return (
 		<section>
@@ -97,9 +98,9 @@ const ProfilePage: NextPage<ProfilePageProps> = memo(({ params: { id } }) => {
 							<TabsTrigger
 								key={tab.label}
 								value={tab.value}
-								onClick={() => {
-									setSelectedTab(tab.label as PROFILE_TABS);
-								}}
+								onClick={() =>
+									setSelectedTab(tab.label as PROFILE_TABS)
+								}
 								disabled={tab.label === 'Tagged'}
 								className="tab"
 							>
@@ -114,7 +115,7 @@ const ProfilePage: NextPage<ProfilePageProps> = memo(({ params: { id } }) => {
 
 								{tab.label === selectedTab && (
 									<p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
-										{threads.length ?? 0}
+										{selectedPosts.length ?? 0}
 									</p>
 								)}
 							</TabsTrigger>
@@ -129,7 +130,9 @@ const ProfilePage: NextPage<ProfilePageProps> = memo(({ params: { id } }) => {
 						>
 							<ThreadsTab
 								currentUserId={user?.id ?? ''}
-								threads={threads}
+								threads={
+									tab.label === 'Threads' ? threads : replies
+								}
 							/>
 						</TabsContent>
 					))}

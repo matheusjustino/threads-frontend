@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { Loader } from 'lucide-react';
+import debounce from 'lodash.debounce';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -10,9 +11,12 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { listCommunities } from '../../../services/community/list-communities';
 
 // COMPONENTS
+import { Input } from '../../../components/ui/input';
 import { CommunityCard } from '../../../components/cards/community-card';
 
 const CommunityPage: NextPage = () => {
+	const [searchInput, setSearchInput] = useState<string>('');
+
 	const {
 		data,
 		refetch,
@@ -24,6 +28,10 @@ const CommunityPage: NextPage = () => {
 	} = useInfiniteQuery(
 		[`infinite-search-feed`],
 		async ({ pageParam = 0 }) => {
+			if (!searchInput.trim().length) {
+				return [];
+			}
+
 			return await listCommunities({
 				skip: pageParam,
 				take: '10',
@@ -41,15 +49,35 @@ const CommunityPage: NextPage = () => {
 		},
 	);
 
-	useEffect(() => {
+	const fetchCommunities = debounce(() => {
 		refetch();
-	}, [refetch]);
+	}, 500);
+
+	useEffect(() => {
+		fetchCommunities();
+	}, []);
+
+	const debouncedFetchCommunities = useCallback(() => {
+		fetchCommunities();
+	}, []);
 
 	const communities = data?.pages.flat() ?? [];
 
 	return (
 		<section>
 			<h1 className="head-text mb-10">Communities</h1>
+
+			<Input
+				id="searchTerm"
+				name="searchTerm"
+				value={searchInput}
+				onChange={(v) => {
+					setSearchInput(v.target.value);
+					debouncedFetchCommunities();
+				}}
+				className="no-focus border border-dark-4 bg-dark-3 text-light-1"
+				placeholder="Search..."
+			/>
 
 			{isFetching && (
 				<div className="w-full flex flex-col items-center justify-center mt-8">

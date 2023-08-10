@@ -7,8 +7,8 @@ import { cn } from '../../lib/utils';
 export interface InputProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
-	register: UseFormRegisterReturn<string>;
-	errors: FieldErrors;
+	register?: UseFormRegisterReturn<string>;
+	errors?: FieldErrors;
 	icon?: LucideIcon | (() => JSX.Element);
 	iconSize?: number;
 }
@@ -16,6 +16,7 @@ export interface InputProps
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	(
 		{
+			name,
 			className,
 			type,
 			id,
@@ -33,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 				<div className="flex flex-col gap-2">
 					<label
 						className="flex items-center gap-2 text-black dark:text-white"
-						htmlFor={register.name}
+						htmlFor={register?.name ?? name}
 					>
 						<>
 							{Icon && <Icon size={iconSize ?? 20} />} {label}
@@ -49,7 +50,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 						{...props}
 					/>
 
-					{id && errors[id] && (
+					{id && errors && errors[id] && (
 						<span className="text-[10px] sm:text-[12px] text-red-400">
 							{errors[id]?.message?.toString() ?? 'Error'}
 						</span>

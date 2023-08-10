@@ -11,19 +11,20 @@ import { PostThread } from '../../../components/forms/post-thread';
 const CreateThreadPage: NextPage = async () => {
 	const user = await currentUser();
 	if (!user) {
+		redirect('/');
 		return null;
 	}
 
-	const userInfo = await getUser(user.id);
-	if (!userInfo?.onboarded) {
-		redirect('/onboarding');
-	}
+	// const userInfo = await getUser(user.id);
+	// if (!userInfo?.onboarded) {
+	// 	redirect('/onboarding');
+	// }
 
 	return (
 		<>
 			<h1 className="head-text">Create Thread</h1>
 
-			<PostThread userId={userInfo.id} />
+			<PostThread userId={user.id} />
 		</>
 	);
 };
