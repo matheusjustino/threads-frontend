@@ -1,6 +1,7 @@
 // INTERFACES
 import { UserInterface } from './user.interface';
 import { ThreadInterface } from './thread.interface';
+import { CommunityMemberInterface } from './community-member.interface';
 
 export interface CommunityInterface {
 	id: string;
@@ -10,7 +11,7 @@ export interface CommunityInterface {
 	image: string;
 	createdById: string;
 	createdBy: UserInterface;
-	members: UserInterface[];
+	members: CommunityMemberInterface[];
 	threads: ThreadInterface[];
 	createdAt: string;
 	updatedAt: string;

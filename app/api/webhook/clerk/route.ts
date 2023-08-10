@@ -151,8 +151,8 @@ export const POST = async (request: Request) => {
 			console.log('removed', evnt?.data);
 
 			await removeUserFromCommunity(
-				public_user_data.user_id,
 				organization.id,
+				public_user_data.user_id,
 			);
 
 			return NextResponse.json(

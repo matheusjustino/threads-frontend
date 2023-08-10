@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { NextPage } from 'next';
 import { Loader } from 'lucide-react';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -14,6 +15,7 @@ import { CommunityCard } from '../../../components/cards/community-card';
 const CommunityPage: NextPage = () => {
 	const {
 		data,
+		refetch,
 		fetchNextPage,
 		hasNextPage,
 		isFetched,
@@ -35,8 +37,13 @@ const CommunityPage: NextPage = () => {
 
 				return pages.length + 1;
 			},
+			enabled: false,
 		},
 	);
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
 
 	const communities = data?.pages.flat() ?? [];
 
@@ -81,7 +88,9 @@ const CommunityPage: NextPage = () => {
 								name={community.name}
 								username={community.username}
 								imgUrl={community.image}
-								members={community.members}
+								members={community.members.map(
+									(communityMember) => communityMember.member,
+								)}
 							/>
 						))}
 				</div>

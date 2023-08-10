@@ -129,10 +129,10 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ params: { id } }) => {
 									{profile.members.map((member) => (
 										<UserCard
 											key={member.id}
-											id={member.id}
-											name={member.name}
-											username={member.username}
-											imgUrl={member.profilePhoto}
+											id={member.memberId}
+											name={member.member.name}
+											username={member.member.username}
+											imgUrl={member.member.profilePhoto}
 											personType="User"
 										/>
 									))}

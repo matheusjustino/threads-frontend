@@ -1,1 +1,3 @@
-export const updateCommunityInfo = async (...args: any[]) => {};
+export const updateCommunityInfo = async (...args: any[]) => {
+	console.log(args);
+};
